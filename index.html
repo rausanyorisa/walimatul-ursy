@@ -286,7 +286,7 @@
     </section>
 
     <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbycAKI3ktpfQCRHraYDSPjQa0BUr53bBtQazYi75bzs5DvjBxwIvPTwwqLAcH77vcOo/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbznQ0vDlKX4SFsqJZ2j1QIRg0eRY08zXy8yST4icn3_NXCLQeUbw6UbkkdhfViKtpke/exec";
 
 // =====================
 // KIRIM UCAPAN
@@ -318,16 +318,10 @@ document.getElementById("ucapanForm").addEventListener("submit", async (e) => {
   }
 });
 
-// =====================
-// AMBIL & TAMPILKAN UCAPAN
-// =====================
 async function loadUcapan() {
   try {
     const res = await fetch(SCRIPT_URL);
     const text = await res.text();
-
-    console.log("Response GET:", text);
-
     const data = JSON.parse(text);
 
     const slider = document.getElementById("sliderUcapan");
@@ -343,55 +337,60 @@ async function loadUcapan() {
       slider.appendChild(card);
     });
 
+    totalOriginal = 0; // reset agar cloning tidak dobel
     currentSlide = 0;
+
     initializeSliderLoop();
   } catch (err) {
     console.error("Gagal load ucapan:", err);
   }
 }
 
-window.addEventListener("load", loadUcapan);
+loadUcapan();
 
-// =====================
-// INFINITE LOOP SLIDER
-// =====================
+
+// ===============================
+// SLIDER INFINITE BERFUNGSI
+// ===============================
+
 let currentSlide = 0;
 let autoPlay = true;
 let autoInterval = null;
 let totalOriginal = 0;
 
+// Duplikasi slide sekali untuk efek infinite
 function cloneSlidesOnce() {
   const slider = document.getElementById("sliderUcapan");
-  if (slider.dataset.cloned === "true") return; // biar ga clone 2x
+  const cards = [...slider.children];
 
-  const items = Array.from(slider.children);
-  totalOriginal = items.length;
+  if (cards.length === 0) return;
 
-  // Clone & append
-  items.forEach(card => {
-    const clone = card.cloneNode(true);
-    clone.classList.add("clone");
-    slider.appendChild(clone);
-  });
+  if (totalOriginal === 0) {
+    totalOriginal = cards.length;
+    cards.forEach(card => slider.appendChild(card.cloneNode(true)));
+  }
+}
 
-  slider.dataset.cloned = "true";
+function getCardWidth() {
+  const slider = document.getElementById("sliderUcapan");
+  const card = slider.children[0];
+  if (!card) return 0;
+
+  const style = window.getComputedStyle(slider);
+  const gap = parseInt(style.columnGap || style.gap || 24); // fallback 24px
+
+  return card.offsetWidth + gap;
 }
 
 function updateSlider(instant = false) {
   const slider = document.getElementById("sliderUcapan");
-  const cards = slider.children;
-
-  if (cards.length === 0 || totalOriginal === 0) return;
-
-  // Hitung width card + gap dinamis
-  const cardWidth = cards[0].offsetWidth + 24; // gap-6 = 24px
-
-  const offset = -currentSlide * cardWidth;
+  const cardWidth = getCardWidth();
+  if (cardWidth === 0 || totalOriginal === 0) return;
 
   slider.style.transition = instant ? "none" : "transform 0.5s ease";
-  slider.style.transform = `translateX(${offset}px)`;
+  slider.style.transform = `translateX(${-currentSlide * cardWidth}px)`;
 
-  // Jika sudah sampai clone terakhir → reset tanpa animasi
+  // kalau sudah ke clone → reset ke slide awal
   if (currentSlide === totalOriginal) {
     setTimeout(() => {
       slider.style.transition = "none";
@@ -405,23 +404,25 @@ function startAutoPlay() {
   if (autoInterval) clearInterval(autoInterval);
 
   autoInterval = setInterval(() => {
-    if (!autoPlay || totalOriginal === 0) return;
+    if (!autoPlay) return;
+    if (totalOriginal === 0) return;
 
     currentSlide++;
     updateSlider();
   }, 4000);
 }
 
+// BUTTON NEXT
 document.getElementById("nextUcapan").addEventListener("click", () => {
   if (totalOriginal === 0) return;
   currentSlide++;
   updateSlider();
 });
 
+// BUTTON PREV
 document.getElementById("prevUcapan").addEventListener("click", () => {
   if (totalOriginal === 0) return;
 
-  // Jika sedang di slide pertama → lompat ke clone terakhir tanpa animasi
   if (currentSlide === 0) {
     currentSlide = totalOriginal;
     updateSlider(true);
@@ -431,12 +432,15 @@ document.getElementById("prevUcapan").addEventListener("click", () => {
   updateSlider();
 });
 
+// BUTTON PAUSE / START
 document.getElementById("toggleAuto").addEventListener("click", () => {
   autoPlay = !autoPlay;
   document.getElementById("toggleAuto").textContent = autoPlay ? "⏸️" : "▶️";
-  startAutoPlay();
 });
 
+// =====================
+// DIPANGGIL SETELAH FETCH UCAPAN
+// =====================
 function initializeSliderLoop() {
   cloneSlidesOnce();
   updateSlider(true);
