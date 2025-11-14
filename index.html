@@ -299,12 +299,12 @@ document.getElementById("ucapanForm").addEventListener("submit", async (e) => {
 
   if (!nama || !isi) return;
 
-  const formData = new FormData();
-  formData.append("nama", nama);
-  formData.append("ucapan", isi);
-
   try {
-    await fetch(SCRIPT_URL, { method: "POST", body: formData });
+    await fetch(SCRIPT_URL, { 
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nama: nama, ucapan: isi })
+    });
 
     document.getElementById("namaUcapan").value = "";
     document.getElementById("isiUcapan").value = "";
@@ -343,7 +343,7 @@ async function loadUcapan() {
   }
 }
 
-loadUcapan(); // auto-load saat masuk
+loadUcapan();
 
 // =====================
 // SLIDER UCAPAN
@@ -354,7 +354,7 @@ let autoPlay = true;
 function updateSlider() {
   const slider = document.getElementById("sliderUcapan");
   const cards = slider.children.length;
-  const offset = -currentSlide * 320; // width + gap
+  const offset = -currentSlide * 320;
   slider.style.transform = `translateX(${offset}px)`;
 }
 
