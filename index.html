@@ -344,82 +344,109 @@ async function loadUcapan() {
     });
 
     currentSlide = 0;
-    updateSlider();
+    initializeSliderLoop();
   } catch (err) {
     console.error("Gagal load ucapan:", err);
   }
 }
 
-loadUcapan(); // auto load setiap halaman dibuka
+window.addEventListener("load", loadUcapan);
 
 // =====================
-// SLIDER UCAPAN FINAL
+// INFINITE LOOP SLIDER
 // =====================
 let currentSlide = 0;
 let autoPlay = true;
 let autoInterval = null;
+let totalOriginal = 0;
 
-function updateSlider() {
+function cloneSlidesOnce() {
+  const slider = document.getElementById("sliderUcapan");
+  if (slider.dataset.cloned === "true") return; // biar ga clone 2x
+
+  const items = Array.from(slider.children);
+  totalOriginal = items.length;
+
+  // Clone & append
+  items.forEach(card => {
+    const clone = card.cloneNode(true);
+    clone.classList.add("clone");
+    slider.appendChild(clone);
+  });
+
+  slider.dataset.cloned = "true";
+}
+
+function updateSlider(instant = false) {
   const slider = document.getElementById("sliderUcapan");
   const total = slider.children.length;
 
-  if (total === 0) return; // antisipasi kosong
+  if (totalOriginal === 0) return;
 
-  // Pastikan currentSlide tidak keluar batas
-  if (currentSlide >= total) currentSlide = 0;
-  if (currentSlide < 0) currentSlide = total - 1;
+  const offset = -currentSlide * 320;
 
-  const offset = -currentSlide * 320; // 300px card + 20px gap
+  if (instant) {
+    slider.style.transition = "none";
+  } else {
+    slider.style.transition = "transform 0.5s ease";
+  }
+
   slider.style.transform = `translateX(${offset}px)`;
+
+  // Reset ke awal clone secara seamless
+  if (currentSlide === totalOriginal) {
+    setTimeout(() => {
+      slider.style.transition = "none";
+      currentSlide = 0;
+      updateSlider(true);
+    }, 500);
+  }
 }
 
 function startAutoPlay() {
-  // hapus interval lama agar tidak double
   if (autoInterval) clearInterval(autoInterval);
 
   autoInterval = setInterval(() => {
     if (!autoPlay) return;
 
     const slider = document.getElementById("sliderUcapan");
-    const total = slider.children.length;
-    if (total === 0) return;
 
-    currentSlide = (currentSlide + 1) % total;
+    if (totalOriginal === 0) return;
+
+    currentSlide++;
     updateSlider();
   }, 4000);
 }
 
-// Tombol NEXT
 document.getElementById("nextUcapan").addEventListener("click", () => {
-  const slider = document.getElementById("sliderUcapan");
-  const total = slider.children.length;
-  if (total === 0) return;
-
-  currentSlide = (currentSlide + 1) % total;
+  if (totalOriginal === 0) return;
+  currentSlide++;
   updateSlider();
 });
 
-// Tombol PREV
 document.getElementById("prevUcapan").addEventListener("click", () => {
-  const slider = document.getElementById("sliderUcapan");
-  const total = slider.children.length;
-  if (total === 0) return;
+  if (totalOriginal === 0) return;
 
-  currentSlide = (currentSlide - 1 + total) % total;
+  if (currentSlide === 0) {
+    currentSlide = totalOriginal;
+    updateSlider(true);
+  }
+
+  currentSlide--;
   updateSlider();
 });
 
-// Tombol PAUSE/PLAY
 document.getElementById("toggleAuto").addEventListener("click", () => {
   autoPlay = !autoPlay;
-
   document.getElementById("toggleAuto").textContent = autoPlay ? "⏸️" : "▶️";
-
-  startAutoPlay(); // restart autoplay biar sinkron
+  startAutoPlay();
 });
 
-// Mulai autoplay pertama kali
-startAutoPlay();
+function initializeSliderLoop() {
+  cloneSlidesOnce();
+  updateSlider(true);
+  startAutoPlay();
+}
 
 </script>
 
