@@ -286,11 +286,9 @@
     </section>
 
     <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwNo9kZkGgMVuWTkJqFNv0aLjIqRNk_FIuiE5mG9897Wk0qF8cTAvmruRfsYc7Bo2K-/exec";
+const SCRIPT_URL = "PASTE_URL_WEB_APP_DI_SINI";  // ganti dengan yang terbaru
 
-// =====================
 // KIRIM UCAPAN
-// =====================
 document.getElementById("ucapanForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -299,29 +297,26 @@ document.getElementById("ucapanForm").addEventListener("submit", async (e) => {
 
   if (!nama || !isi) return;
 
+  const formData = new FormData();
+  formData.append("nama", nama);
+  formData.append("ucapan", isi);
+
   try {
-    await fetch(SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nama: nama, ucapan: isi })
-    });
+    await fetch(SCRIPT_URL, { method: "POST", body: formData });
 
     document.getElementById("namaUcapan").value = "";
     document.getElementById("isiUcapan").value = "";
 
-    loadUcapan(); // refresh ucapan
+    loadUcapan();
   } catch (err) {
-    console.error("Error mengirim ucapan:", err);
+    console.error("Gagal mengirim:", err);
   }
 });
 
-
-// =====================
-// AMBIL & TAMPILKAN UCAPAN
-// =====================
+// AMBIL UCAPAN
 async function loadUcapan() {
   try {
-    const res = await fetch(SCRIPT_URL + "?t=" + Date.now());
+    const res = await fetch(SCRIPT_URL + "?t=" + Date.now()); // Anti-cache
     const data = await res.json();
 
     const slider = document.getElementById("sliderUcapan");
@@ -329,7 +324,7 @@ async function loadUcapan() {
 
     data.reverse().forEach(item => {
       const card = document.createElement("div");
-      card.className = "min-w-[300px] bg-white shadow-md rounded-xl p-4 border";
+      card.className = "min-w-[300px] bg-white shadow-md rounded-xl p-4 border border-gray-200";
       card.innerHTML = `
         <h3 class="font-bold text-burgundy">${item.nama}</h3>
         <p class="text-gray-700 mt-2">${item.ucapan}</p>
@@ -340,22 +335,18 @@ async function loadUcapan() {
     currentSlide = 0;
     updateSlider();
   } catch (err) {
-    console.error("Error load ucapan:", err);
+    console.error("Gagal load:", err);
   }
 }
 
-
 loadUcapan();
 
-// =====================
-// SLIDER UCAPAN
-// =====================
+// SLIDER
 let currentSlide = 0;
 let autoPlay = true;
 
 function updateSlider() {
   const slider = document.getElementById("sliderUcapan");
-  const cards = slider.children.length;
   const offset = -currentSlide * 320;
   slider.style.transform = `translateX(${offset}px)`;
 }
@@ -372,17 +363,16 @@ document.getElementById("prevUcapan").addEventListener("click", () => {
   updateSlider();
 });
 
-// Auto play tiap 4 detik
 setInterval(() => {
   if (autoPlay) document.getElementById("nextUcapan").click();
 }, 4000);
 
-// Toggle autoplay
 document.getElementById("toggleAuto").addEventListener("click", () => {
   autoPlay = !autoPlay;
   document.getElementById("toggleAuto").textContent = autoPlay ? "⏸️" : "▶️";
 });
 </script>
+
 
 
   <!-- MUSIC -->
