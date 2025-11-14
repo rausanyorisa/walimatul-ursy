@@ -275,6 +275,10 @@
         <textarea id="isiUcapan" placeholder="Tulis ucapan Anda..." required class="w-full border rounded-lg px-4 py-2 mb-4 focus:ring-2 focus:ring-burgundy"></textarea>
         <button type="submit" class="bg-burgundy text-white px-6 py-2 rounded-full hover:bg-burgundy/90 transition">Kirim Ucapan</button>
       </form>
+      <p id="ucapanSuccess" class="hidden text-green-700 font-semibold text-center mt-4">
+  Terima kasih atas ucapan & doanya! ❤️
+</p>
+
       <div class="relative w-full max-w-4xl overflow-hidden">
         <div id="sliderUcapan" class="flex space-x-6 transition-transform duration-500"></div>
         <div class="flex justify-center items-center gap-4 mt-6">
@@ -432,33 +436,43 @@ async function submitUcapan() {
   loadUcapan();
 }
 document.getElementById("ucapanForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const nama = document.getElementById("namaUcapan").value.trim();
-    const ucapan = document.getElementById("isiUcapan").value.trim();
-    if (!nama || !ucapan) return;
+  const nama = document.getElementById("namaUcapan").value.trim();
+  const ucapan = document.getElementById("isiUcapan").value.trim();
+  if (!nama || !ucapan) return;
 
-    const formData = new FormData();
-    formData.append("nama", nama);
-    formData.append("ucapan", ucapan);
+  const formData = new FormData();
+  formData.append("nama", nama);
+  formData.append("ucapan", ucapan);
 
-    try {
-      await fetch(SCRIPT_URL, {
-        method: "POST",
-        body: formData
-      });
+  try {
+    await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: formData
+    });
 
-      // Bersihkan input
-      document.getElementById("namaUcapan").value = "";
-      document.getElementById("isiUcapan").value = "";
+    // TAMPILKAN PESAN SUKSES
+    const success = document.getElementById("ucapanSuccess");
+    success.classList.remove("hidden");
 
-      // Reload ucapan untuk masuk ke slider
-      loadUcapan();
+    // Hilang otomatis 4 detik
+    setTimeout(() => {
+      success.classList.add("hidden");
+    }, 4000);
 
-    } catch (err) {
-      console.error("Gagal kirim ucapan:", err);
-    }
-  });
+    // Bersihkan input
+    document.getElementById("namaUcapan").value = "";
+    document.getElementById("isiUcapan").value = "";
+
+    // Reload ucapan untuk masuk ke slider
+    loadUcapan();
+
+  } catch (err) {
+    console.error("Gagal kirim ucapan:", err);
+  }
+});
+
 
 // ===============================
 // 7️⃣ BUTTON NEXT / PREV / PAUSE
