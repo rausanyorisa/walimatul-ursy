@@ -286,7 +286,7 @@
     </section>
 
     <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx1t_j4FFC5pna1Od0ula3OCJP70vMYa0fEoKpCijS4FFp9v8dPOQ08D-LzBsNh9uuQ/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwNo9kZkGgMVuWTkJqFNv0aLjIqRNk_FIuiE5mG9897Wk0qF8cTAvmruRfsYc7Bo2K-/exec";
 
 // =====================
 // KIRIM UCAPAN
@@ -300,7 +300,7 @@ document.getElementById("ucapanForm").addEventListener("submit", async (e) => {
   if (!nama || !isi) return;
 
   try {
-    await fetch(SCRIPT_URL, { 
+    await fetch(SCRIPT_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ nama: nama, ucapan: isi })
@@ -309,18 +309,19 @@ document.getElementById("ucapanForm").addEventListener("submit", async (e) => {
     document.getElementById("namaUcapan").value = "";
     document.getElementById("isiUcapan").value = "";
 
-    loadUcapan(); // refresh ucapan terbaru
+    loadUcapan(); // refresh ucapan
   } catch (err) {
     console.error("Error mengirim ucapan:", err);
   }
 });
+
 
 // =====================
 // AMBIL & TAMPILKAN UCAPAN
 // =====================
 async function loadUcapan() {
   try {
-    const res = await fetch(SCRIPT_URL);
+    const res = await fetch(SCRIPT_URL + "?t=" + Date.now());
     const data = await res.json();
 
     const slider = document.getElementById("sliderUcapan");
@@ -328,7 +329,7 @@ async function loadUcapan() {
 
     data.reverse().forEach(item => {
       const card = document.createElement("div");
-      card.className = "min-w-[300px] bg-white shadow-md rounded-xl p-4 border border-gray-200";
+      card.className = "min-w-[300px] bg-white shadow-md rounded-xl p-4 border";
       card.innerHTML = `
         <h3 class="font-bold text-burgundy">${item.nama}</h3>
         <p class="text-gray-700 mt-2">${item.ucapan}</p>
@@ -342,6 +343,7 @@ async function loadUcapan() {
     console.error("Error load ucapan:", err);
   }
 }
+
 
 loadUcapan();
 
