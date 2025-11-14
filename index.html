@@ -288,109 +288,61 @@
     <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw9yy0Nx7aXEDRh2YDrIbl8JQqG2SBmGD6fcshbJHKtwl1IXdt7Y2YjG5H_2V6MnRKL/exec";
 
-// =====================
-// KIRIM UCAPAN
-// =====================
-document.getElementById("ucapanForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const nama = document.getElementById("namaUcapan").value.trim();
-  const ucapan = document.getElementById("isiUcapan").value.trim();
-
-  if (!nama || !ucapan) return;
-
-  const body = new URLSearchParams();
-  body.append("nama", nama);
-  body.append("ucapan", ucapan);
-
-  try {
-    await fetch(SCRIPT_URL, {
-      method: "POST",
-      body: body,
-    });
-
-    document.getElementById("namaUcapan").value = "";
-    document.getElementById("isiUcapan").value = "";
-
-    loadUcapan(); // refresh ucapan
-  } catch (err) {
-    console.error("Gagal kirim:", err);
-  }
-});
-
-async function loadUcapan() {
-  try {
-    const res = await fetch(SCRIPT_URL);
-    const text = await res.text();
-    const data = JSON.parse(text);
-
-    const slider = document.getElementById("sliderUcapan");
-    slider.innerHTML = "";
-
-    data.reverse().forEach(item => {
-      const card = document.createElement("div");
-      card.className = "min-w-[300px] bg-white shadow-md rounded-xl p-4 border border-gray-200";
-      card.innerHTML = `
-        <h3 class="font-bold text-burgundy">${item.nama}</h3>
-        <p class="text-gray-700 mt-2">${item.ucapan}</p>
-      `;
-      slider.appendChild(card);
-    });
-
-    totalOriginal = 0; // reset agar cloning tidak dobel
-    currentSlide = 0;
-
-    initializeSliderLoop();
-  } catch (err) {
-    console.error("Gagal load ucapan:", err);
-  }
-}
-
-loadUcapan();
-
-
-// ===============================
-// SLIDER INFINITE BERFUNGSI
-// ===============================
-
+// State
 let currentSlide = 0;
+let totalOriginal = 0;
 let autoPlay = true;
 let autoInterval = null;
-let totalOriginal = 0;
+let cloned = false;
 
-// Duplikasi slide sekali untuk efek infinite
-function cloneSlidesOnce() {
-  const slider = document.getElementById("sliderUcapan");
-  const cards = [...slider.children];
-
-  if (cards.length === 0) return;
-
-  if (totalOriginal === 0) {
-    totalOriginal = cards.length;
-    cards.forEach(card => slider.appendChild(card.cloneNode(true)));
-  }
-}
-
+// ===============================
+// 1️⃣ HITUNG CARD WIDTH AKURAT
+// ===============================
 function getCardWidth() {
   const slider = document.getElementById("sliderUcapan");
   const card = slider.children[0];
   if (!card) return 0;
 
-  const style = window.getComputedStyle(slider);
-  const gap = parseInt(style.columnGap || style.gap || 24); // fallback 24px
+  const style = window.getComputedStyle(card);
+  const marginRight = parseInt(style.marginRight || 0);
 
-  return card.offsetWidth + gap;
+  return card.offsetWidth + marginRight;
 }
 
+
+// ===============================
+// 2️⃣ CLONE SLIDE SEKALI SAJA
+// ===============================
+function cloneSlidesOnce() {
+  if (cloned) return;
+
+  const slider = document.getElementById("sliderUcapan");
+  const originalCount = slider.children.length;
+  totalOriginal = originalCount;
+
+  for (let i = 0; i < originalCount; i++) {
+    slider.appendChild(slider.children[i].cloneNode(true));
+  }
+
+  cloned = true;
+}
+
+
+// ===============================
+// 3️⃣ UPDATE SLIDER POSISI
+// ===============================
 function updateSlider(instant = false) {
   const slider = document.getElementById("sliderUcapan");
   const cardWidth = getCardWidth();
-  if (cardWidth === 0 || totalOriginal === 0) return;
+
+  if (cardWidth === 0) return;
+
+  const offset = -currentSlide * cardWidth;
 
   slider.style.transition = instant ? "none" : "transform 0.5s ease";
-  slider.style.transform = `translateX(${-currentSlide * cardWidth}px)`;
+  slider.style.transform = `translateX(${offset}px)`;
 
-  // kalau sudah ke clone → reset ke slide awal
+  // Seamless reset
   if (currentSlide === totalOriginal) {
     setTimeout(() => {
       slider.style.transition = "none";
@@ -400,55 +352,111 @@ function updateSlider(instant = false) {
   }
 }
 
+
+// ===============================
+// 4️⃣ AUTOPLAY CONTROL
+// ===============================
 function startAutoPlay() {
   if (autoInterval) clearInterval(autoInterval);
 
   autoInterval = setInterval(() => {
     if (!autoPlay) return;
-    if (totalOriginal === 0) return;
-
     currentSlide++;
     updateSlider();
-  }, 4000);
+  }, 3500);
 }
 
-// BUTTON NEXT
+
+// ===============================
+// 5️⃣ LOAD DATA DARI GOOGLE SHEET
+// ===============================
+async function loadUcapan() {
+  try {
+    const res = await fetch(SCRIPT_URL);
+    const text = await res.text();
+    const data = JSON.parse(text);
+
+    const slider = document.getElementById("sliderUcapan");
+    slider.innerHTML = "";
+    cloned = false;
+
+    // Tampilkan terbaru di depan
+    data.reverse().forEach(item => {
+      const card = document.createElement("div");
+      card.className =
+        "min-w-[300px] bg-white shadow-md rounded-xl p-4 border border-gray-200 mr-4";
+      card.innerHTML = `
+        <h3 class="font-bold text-burgundy">${item.nama}</h3>
+        <p class="text-gray-700 mt-2">${item.ucapan}</p>
+        <span class="text-xs text-gray-500 block mt-3">${item.waktu}</span>
+      `;
+      slider.appendChild(card);
+    });
+
+    currentSlide = 0;
+    cloneSlidesOnce();
+    updateSlider(true);
+    startAutoPlay();
+
+  } catch (err) {
+    console.error("Gagal load ucapan:", err);
+  }
+}
+
+loadUcapan();
+
+
+// ===============================
+// 6️⃣ KIRIM DATA (POST → JSON FORMAT)
+// ===============================
+async function submitUcapan() {
+  const nama = document.getElementById("nama").value.trim();
+  const ucapan = document.getElementById("ucapan").value.trim();
+
+  if (!nama || !ucapan) {
+    alert("Isi nama dan ucapan!");
+    return;
+  }
+
+  const body = JSON.stringify({ nama, ucapan });
+
+  await fetch(SCRIPT_URL, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": "application/json" }
+  });
+
+  document.getElementById("nama").value = "";
+  document.getElementById("ucapan").value = "";
+
+  loadUcapan();
+}
+
+
+// ===============================
+// 7️⃣ BUTTON NEXT / PREV / PAUSE
+// ===============================
 document.getElementById("nextUcapan").addEventListener("click", () => {
-  if (totalOriginal === 0) return;
   currentSlide++;
   updateSlider();
 });
 
-// BUTTON PREV
 document.getElementById("prevUcapan").addEventListener("click", () => {
-  if (totalOriginal === 0) return;
-
   if (currentSlide === 0) {
     currentSlide = totalOriginal;
     updateSlider(true);
   }
-
   currentSlide--;
   updateSlider();
 });
 
-// BUTTON PAUSE / START
 document.getElementById("toggleAuto").addEventListener("click", () => {
   autoPlay = !autoPlay;
   document.getElementById("toggleAuto").textContent = autoPlay ? "⏸️" : "▶️";
-});
-
-// =====================
-// DIPANGGIL SETELAH FETCH UCAPAN
-// =====================
-function initializeSliderLoop() {
-  cloneSlidesOnce();
-  updateSlider(true);
   startAutoPlay();
-}
-
-
+});
 </script>
+
 
 
 
