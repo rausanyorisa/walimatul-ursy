@@ -285,6 +285,103 @@
       </div>
     </section>
 
+    <script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxVZf95_06otOBoAdMfVFkzcaEnX46DugLFgQmDF_0zn0Y6zm7xc5dOyP6GvMNkji57/exec";
+
+// =====================
+// KIRIM UCAPAN
+// =====================
+document.getElementById("ucapanForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const nama = document.getElementById("namaUcapan").value.trim();
+  const isi  = document.getElementById("isiUcapan").value.trim();
+
+  if (!nama || !isi) return;
+
+  const formData = new FormData();
+  formData.append("nama", nama);
+  formData.append("ucapan", isi);
+
+  try {
+    await fetch(SCRIPT_URL, { method: "POST", body: formData });
+
+    document.getElementById("namaUcapan").value = "";
+    document.getElementById("isiUcapan").value = "";
+
+    loadUcapan(); // refresh ucapan terbaru
+  } catch (err) {
+    console.error("Error mengirim ucapan:", err);
+  }
+});
+
+// =====================
+// AMBIL & TAMPILKAN UCAPAN
+// =====================
+async function loadUcapan() {
+  try {
+    const res = await fetch(SCRIPT_URL);
+    const data = await res.json();
+
+    const slider = document.getElementById("sliderUcapan");
+    slider.innerHTML = "";
+
+    data.reverse().forEach(item => {
+      const card = document.createElement("div");
+      card.className = "min-w-[300px] bg-white shadow-md rounded-xl p-4 border border-gray-200";
+      card.innerHTML = `
+        <h3 class="font-bold text-burgundy">${item.nama}</h3>
+        <p class="text-gray-700 mt-2">${item.ucapan}</p>
+      `;
+      slider.appendChild(card);
+    });
+
+    currentSlide = 0;
+    updateSlider();
+  } catch (err) {
+    console.error("Error load ucapan:", err);
+  }
+}
+
+loadUcapan(); // auto-load saat masuk
+
+// =====================
+// SLIDER UCAPAN
+// =====================
+let currentSlide = 0;
+let autoPlay = true;
+
+function updateSlider() {
+  const slider = document.getElementById("sliderUcapan");
+  const cards = slider.children.length;
+  const offset = -currentSlide * 320; // width + gap
+  slider.style.transform = `translateX(${offset}px)`;
+}
+
+document.getElementById("nextUcapan").addEventListener("click", () => {
+  const total = document.getElementById("sliderUcapan").children.length;
+  currentSlide = (currentSlide + 1) % total;
+  updateSlider();
+});
+
+document.getElementById("prevUcapan").addEventListener("click", () => {
+  const total = document.getElementById("sliderUcapan").children.length;
+  currentSlide = (currentSlide - 1 + total) % total;
+  updateSlider();
+});
+
+// Auto play tiap 4 detik
+setInterval(() => {
+  if (autoPlay) document.getElementById("nextUcapan").click();
+}, 4000);
+
+// Toggle autoplay
+document.getElementById("toggleAuto").addEventListener("click", () => {
+  autoPlay = !autoPlay;
+  document.getElementById("toggleAuto").textContent = autoPlay ? "⏸️" : "▶️";
+});
+</script>
+
 
   <!-- MUSIC -->
   <div class="fixed bottom-4 right-4 z-50">
@@ -373,96 +470,7 @@
     }, 1500);
   }
 
-  // ======== DATA UCAPAN AWAL ========
-  let ucapanList = [
-    { nama: "Adit", isi: "Selamat menempuh hidup baru, semoga sakinah mawaddah warahmah!" },
-    { nama: "Maya", isi: "Barakallah, semoga bahagia selalu ya Rausan & Yorisa 💕" },
-    { nama: "Dina", isi: "Turut berbahagia! Semoga menjadi keluarga yang diberkahi Allah." },
-    { nama: "Rafi", isi: "Selamat menempuh hidup baru! Semoga cinta dan kebahagiaan selalu menyertai kalian berdua." },
-    { nama: "Lina", isi: "Doa terbaik untuk kalian berdua, semoga selalu rukun dan saling melengkapi sampai akhir hayat 🤍" },
-    { nama: "Bagas", isi: "Semoga rumah tangganya penuh tawa, sabar, dan cinta tanpa batas!" },
-    { nama: "Tari", isi: "Barakallah! Semoga menjadi pasangan yang selalu bersama dalam suka dan duka." },
-    { nama: "Dimas", isi: "Selamat atas pernikahannya! Semoga menjadi keluarga kecil yang harmonis dan penuh berkah." },
-    { nama: "Reza", isi: "Semoga perjalanan baru ini selalu dilimpahi kebahagiaan dan cinta yang tumbuh setiap hari." },
-    { nama: "Wulan", isi: "Selamat berbahagia! Semoga Allah selalu menjaga dan mempersatukan kalian dalam kebaikan." },
-  ];
-
-  const slider = document.getElementById("sliderUcapan");
-  const form = document.getElementById("ucapanForm");
-  const namaInput = document.getElementById("namaUcapan");
-  const isiInput = document.getElementById("isiUcapan");
-
-  // ======== RENDER UCAPAN ========
-  function renderUcapan() {
-    slider.innerHTML = "";
-    ucapanList.forEach((u) => {
-      const card = document.createElement("div");
-      card.className =
-        "min-w-[300px] md:min-w-[400px] bg-white shadow-lg rounded-xl p-6 text-center transition-all hover:scale-105";
-      card.innerHTML = `
-        <p class="text-lg text-gray-700 italic mb-3">“${u.isi}”</p>
-        <p class="text-sm font-semibold text-burgundy">– ${u.nama}</p>
-      `;
-      slider.appendChild(card);
-    });
-
-    // Duplikat isi slider untuk efek loop mulus
-    slider.innerHTML += slider.innerHTML;
-  }
-
-  renderUcapan();
-
-  // ======== TAMBAH UCAPAN BARU ========
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const nama = namaInput.value.trim();
-    const isi = isiInput.value.trim();
-    if (!nama || !isi) return;
-
-    ucapanList.push({ nama, isi });
-    namaInput.value = "";
-    isiInput.value = "";
-
-    renderUcapan();
-    alert("Terima kasih! Ucapan kamu telah ditambahkan 💌");
-  });
-
-  // ======== SLIDER LOOP ========
-  let position = 0;
-  let autoSlide = true;
-  const speed = 0.5; // semakin besar semakin cepat
-  const toggleBtn = document.getElementById("toggleAuto");
-
-  function loop() {
-    if (autoSlide) {
-      position -= speed;
-      // reset posisi jika sudah setengah panjang total (karena duplikat)
-      if (Math.abs(position) >= slider.scrollWidth / 2) {
-        position = 0;
-      }
-      slider.style.transform = `translateX(${position}px)`;
-    }
-    requestAnimationFrame(loop);
-  }
-
-  loop();
-
-  // ======== TOGGLE AUTO-SLIDE ========
-  toggleBtn.addEventListener("click", () => {
-    autoSlide = !autoSlide;
-    toggleBtn.textContent = autoSlide ? "⏸️" : "▶️";
-  });
-
-  // ======== TOMBOL MANUAL (prev/next) ========
-  document.getElementById("prevUcapan").addEventListener("click", () => {
-    position += 200;
-    slider.style.transform = `translateX(${position}px)`;
-  });
-
-  document.getElementById("nextUcapan").addEventListener("click", () => {
-    position -= 200;
-    slider.style.transform = `translateX(${position}px)`;
-  });
+  
   </script>
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
