@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Walimatul 'Ursy Rausan & Yorisa</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --burgundy: #7b1e1e;
+      --gold: #d4af37;
+    }
+    body {
+      background: url('./img/bg1.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Poppins', sans-serif;
+      scroll-behavior: smooth;
+    }
+    .overlay { background-color: rgba(255, 255, 255, 0.85); }
+    .hidden-section { display: none; }
+    .fade-in { animation: fadeIn 1s ease-in-out forwards; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .text-burgundy { color: var(--burgundy); }
+    .bg-burgundy { background-color: var(--burgundy); }
+    .section { aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; }
+  </style>
+</head>
+
+<body class="text-center text-gray-800">
+
+<!-- COVER -->
+<section id="cover" class="relative flex flex-col justify-center items-center h-screen text-center bg-white/80 overflow-hidden">
+  <!-- Background Image Blur -->
+  <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('./img/bg1.jpg'); filter: brightness(0.8);"></div>
+  <div class="absolute inset-0 bg-white/70 backdrop-blur-sm"></div>
+
+  <!-- Content -->
+  <div class="relative z-10 space-y-5">
+    <h3 class="text-sm tracking-[0.3em] text-burgundy uppercase font-medium">UNDANGAN</h3>
+
+    <h1 class="text-4xl md:text-5xl font-serif text-burgundy leading-tight">Walimatul ’Ursy</h1>
+
+    <div class="space-y-2 mt-4">
+      <p class="text-2xl md:text-3xl text-white font-semibold">
+        Rausan <span class="text-white font-serif italic">(Ocan)</span>
+      </p>
+      <p class="text-xl text-white font-light">&amp;</p>
+      <p class="text-2xl md:text-3xl text-white font-semibold">
+        Yorisa <span class="text-white font-serif italic">(Caca)</span>
+      </p>
+    </div>
+
+    <div class="mt-4">
+      <p class="text-lg md:text-xl text-white font-medium">11.12.2025</p>
+    </div>
+
+    <button id="openInvitation"
+      class="mt-8 bg-burgundy text-white px-8 py-3 rounded-full shadow-lg hover:bg-burgundy/90 transition-all duration-300">
+      Buka Undangan
+    </button>
+  </div>
+</section>
+
+
+
+  <!-- SECTION 1 -->
+<section id="tanggal" class="section hidden-section overlay flex flex-col justify-center items-center">
+  <div class="text-center space-y-4">
+    <h2 class="text-3xl md:text-4xl font-semibold text-burgundy">11.12.2025</h2>
+    <h3 class="text-2xl md:text-3xl font-serif text-gray-800">
+      Walimatul 'Ursy<br>
+      <span class="text-burgundy font-semibold">Rausan (Ocan)</span> & 
+      <span class="text-burgundy font-semibold">Yorisa (Caca)</span>
+    </h3>
+    
+    <div id="countdown" class="mt-6 text-lg md:text-xl text-gray-700 font-medium bg-white/70 px-6 py-3 rounded-full inline-block shadow-md border border-burgundy"></div>
+  </div>
+</section>
+
+
+  <!-- SECTION 2 -->
+  <section id="ayat" class="section hidden-section overlay">
+    <div class="bg-white bg-opacity-90 rounded-xl shadow-lg p-6 max-w-3xl mx-auto">
+      <h3 class="text-lg font-semibold text-burgundy mb-2">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</h3>
+      <p class="text-2xl leading-relaxed mb-2">
+        وَمِنْ اٰيَاتِهٖٓ اَنْ خَلَقَ لَكُمْ مِّنْ اَنْفُسِكُمْ اَزْوَاجًا لِّتَسْكُنُوْٓا اِلَيْهَا 
+        وَجَعَلَ بَيْنَكُمْ مَّوَدَّةً وَّرَحْمَةًۗ 
+      </p>
+      <p class="italic text-gray-700 mb-2">
+        Wa min āyātihi an khalaqa lakum min anfusikum azwājan litaskunū ilaihā wa ja‘ala bainakum mawaddatan wa raḥmah.
+      </p>
+      <p class="text-gray-800">
+        “Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri,
+        supaya kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.”
+        (Q.S. Ar-Rum: 21)
+      </p>
+    </div>
+  </section>
+
+  <!-- SECTION 3: MEMPELAI -->
+<section id="mempelai" class="section hidden-section overlay flex flex-col justify-center items-center">
+  <div class="bg-white/90 rounded-2xl shadow-lg p-8 md:p-12 max-w-5xl mx-auto text-center space-y-8">
+    
+    <h2 class="text-3xl md:text-4xl font-semibold text-burgundy font-serif">Kedua Mempelai</h2>
+
+    <!-- Kalimat Pembuka -->
+    <p class="text-base md:text-lg text-gray-700 leading-relaxed italic">
+      Dengan memohon rahmat dan ridho Allah Subhanahu wa Ta’ala,<br>
+      kami bermaksud menyelenggarakan acara <span class="font-semibold text-burgundy">Walimatul ‘Ursy</span>.
+    </p>
+
+    <!-- Foto dan Profil Mempelai -->
+    <div class="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16 mt-6">
+      
+      <!-- Mempelai Pria -->
+      <div class="flex flex-col items-center space-y-3">
+        <div class="w-48 h-48 rounded-full overflow-hidden border-4 border-burgundy shadow-md">
+          <img src="img/rausan.jpg" alt="Rausan Fikri" class="w-full h-full object-cover">
+        </div>
+        <h3 class="text-2xl font-semibold text-burgundy">Rausan Fikri (Ocan)</h3>
+        <p class="text-gray-700 text-sm md:text-base leading-relaxed">
+          Putra dari<br>
+          (Alm) Bapak <span class="font-medium">K.H. Aep Saepuddin</span><br>
+          & Ibu <span class="font-medium">Warita</span>
+        </p>
+      </div>
+
+      <!-- Simbol "&" -->
+      <div class="text-4xl text-burgundy font-serif font-bold">&amp;</div>
+
+      <!-- Mempelai Wanita -->
+      <div class="flex flex-col items-center space-y-3">
+        <div class="w-48 h-48 rounded-full overflow-hidden border-4 border-gold shadow-md">
+          <img src="img/yorisa.jpg" alt="Andhina Yorisa" class="w-full h-full object-cover">
+        </div>
+        <h3 class="text-2xl font-semibold text-burgundy">Andhina Yorisa (Caca)</h3>
+        <p class="text-gray-700 text-sm md:text-base leading-relaxed">
+          Putri dari<br>
+          (Alm) Bapak <span class="font-medium">H. Cecep Sumitra</span><br>
+          & Ibu <span class="font-medium">Hj. Tienny Sumartienny</span>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+  <!-- SECTION 4 -->
+  <section id="acara" class="section hidden-section overlay">
+    <div class="bg-white bg-opacity-90 rounded-xl shadow-lg p-6 max-w-3xl mx-auto space-y-4">
+      <h3 class="text-2xl font-semibold text-burgundy">Informasi Acara</h3>
+      <p class="text-gray-800">
+        <span class="font-semibold">Kamis, 11 Desember 2025</span><br>Pukul <span class="font-semibold">10.00 – 12.00 WIB</span>
+      </p>
+
+      <div class="border-t border-gray-300 pt-4">
+        <h4 class="text-lg font-semibold text-burgundy mb-2">Tempat Acara:</h4>
+        <p class="text-gray-700">The Teras Dara Restaurant & Lounge</p>
+      </div>
+
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.5699718949745!2d106.8004718!3d-6.5758280000000005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69c43a1c3b1207%3A0x78262ec39b0a467f!2sThe%20Teras%20Dara%20Restaurant%20%26%20Lounge!5e0!3m2!1sid!2sid!4v1761454105946!5m2!1sid!2sid"
+        width="100%" height="250" class="rounded-lg shadow-md mt-4" loading="lazy">
+      </iframe>
+
+      <div class="flex flex-col sm:flex-row justify-center gap-4 mt-4">
+        <a href="https://maps.google.com/?q=The+Teras+Dara+Restaurant+%26+Lounge"
+           target="_blank"
+           class="bg-burgundy text-white px-6 py-3 rounded-full hover:bg-red-700 transition">📍 Lihat Lokasi</a>
+        <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Walimatul+Ursy+Rausan+%26+Yorisa&details=Walimatul+Ursy+di+The+Teras+Dara+Restaurant+%26+Lounge,+Bogor.&dates=20251211T100000/20251211T120000&location=The+Teras+Dara+Restaurant+%26+Lounge"
+           target="_blank"
+           class="bg-yellow-600 text-white px-6 py-3 rounded-full hover:bg-yellow-500 transition">🗓️ Tambahkan ke Kalender</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: RSVP -->
+<section id="rsvp" class="section hidden-section overlay">
+  <div class="bg-white bg-opacity-90 rounded-xl shadow-lg p-6 max-w-3xl mx-auto space-y-5">
+    <h3 class="text-2xl font-semibold text-burgundy text-center">Konfirmasi Kehadiran</h3>
+    <p class="text-center text-gray-700 text-sm">
+      Apabila Bapak/Ibu/Saudara/i berkenan hadir, mohon mengisi RSVP sebagai akses masuk ke lokasi acara.
+    </p>
+
+    <form id="rsvpForm" class="space-y-4">
+      <input name="nama" placeholder="Nama Lengkap" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-burgundy">
+      <input name="email" placeholder="Email" type="email" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-burgundy">
+      <input name="hp" placeholder="Nomor HP / WA" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-burgundy">
+      <input name="jumlahTamu" placeholder="Jumlah Tamu" type="number" min="1" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-burgundy">
+      <select name="status" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-burgundy">
+        <option value="">Pilih Status Kehadiran</option>
+        <option value="Hadir">Hadir</option>
+        <option value="Tidak Hadir">Tidak Hadir</option>
+      </select>
+
+      <button type="submit" class="bg-burgundy text-white px-6 py-3 rounded-full w-full hover:bg-burgundy/90 transition">
+        Kirim RSVP
+      </button>
+    </form>
+
+    <p id="rsvpSuccess" class="hidden text-green-700 font-semibold text-center mt-4">
+      Terima kasih! RSVP kamu sudah terkirim 💌
+    </p>
+  </div>
+</section>
+
+
+<!-- SECTION 6: TANDA KASIH -->
+<section id="tandak" class="section hidden-section overlay">
+  <div class="bg-white bg-opacity-90 rounded-xl shadow-lg p-6 max-w-3xl mx-auto space-y-8">
+    <h3 class="text-2xl font-semibold text-burgundy">Tanda Kasih</h3>
+    <p class="text-gray-700">
+      Doa dan restu Bapak/Ibu/Saudara/i sudah lebih dari cukup bagi kami. Namun, jika berkenan memberikan tanda kasih, bisa menghubungi kontak atau melalui nomor rekening berikut:
+    </p>  
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-4">
+      <!-- Rausan -->
+      <div class="flex flex-col items-center space-y-4 bg-white/90 rounded-xl p-4 shadow-md">
+        <p class="font-semibold text-burgundy text-xl">Rausan Fikri</p>
+        <a href="https://wa.me/6285163200344" target="_blank"
+           class="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-500 transition">
+           📞 0851-6320-0344
+        </a>
+
+        <div class="border-t border-gray-300 w-full pt-3">
+          <div class="bg-gray-50 rounded-lg p-3 text-center shadow-inner">
+            <p class="font-medium text-burgundy">BCA</p>
+            <div class="flex justify-center items-center space-x-2 mt-2">
+              <p id="rekRausan" class="font-mono text-gray-800">2832506118</p>
+              <button class="salin-btn bg-burgundy text-white px-3 py-1 rounded hover:bg-red-700 transition text-sm"
+                      data-target="rekRausan">
+                📋 Salin
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Yorisa -->
+      <div class="flex flex-col items-center space-y-4 bg-white/90 rounded-xl p-4 shadow-md">
+        <p class="font-semibold text-burgundy text-xl">Andhina Yorisa</p>
+        <a href="https://wa.me/6281808495365" target="_blank"
+           class="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-500 transition">
+           📞 0818-0849-5365
+        </a>
+
+        <div class="border-t border-gray-300 w-full pt-3">
+          <div class="bg-gray-50 rounded-lg p-3 text-center shadow-inner">
+            <p class="font-medium text-burgundy">BCA</p>
+            <div class="flex justify-center items-center space-x-2 mt-2">
+              <p id="rekYorisa" class="font-mono text-gray-800">7380690050</p>
+              <button class="salin-btn bg-burgundy text-white px-3 py-1 rounded hover:bg-red-700 transition text-sm"
+                      data-target="rekYorisa">
+                📋 Salin
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 7: UCAPAN -->
+    <section id="ucapan" class="min-h-screen flex flex-col justify-center items-center bg-white/90 py-16 px-6">
+      <h2 class="text-3xl font-semibold text-burgundy mb-6">Ucapan & Doa</h2>
+      <form id="ucapanForm" class="bg-white rounded-2xl shadow-lg p-6 w-full max-w-lg text-center mb-8">
+        <input id="namaUcapan" placeholder="Nama Anda" required class="w-full border rounded-lg px-4 py-2 mb-4 focus:ring-2 focus:ring-burgundy">
+        <textarea id="isiUcapan" placeholder="Tulis ucapan Anda..." required class="w-full border rounded-lg px-4 py-2 mb-4 focus:ring-2 focus:ring-burgundy"></textarea>
+        <button type="submit" class="bg-burgundy text-white px-6 py-2 rounded-full hover:bg-burgundy/90 transition">Kirim Ucapan</button>
+      </form>
+      <div class="relative w-full max-w-4xl overflow-hidden">
+        <div id="sliderUcapan" class="flex space-x-6 transition-transform duration-500"></div>
+        <div class="flex justify-center items-center gap-4 mt-6">
+          <button id="prevUcapan" class="bg-burgundy text-white px-3 py-2 rounded-full">⬅️</button>
+          <button id="toggleAuto" class="bg-yellow-600 text-white px-3 py-2 rounded-full">⏸️</button>
+          <button id="nextUcapan" class="bg-burgundy text-white px-3 py-2 rounded-full">➡️</button>
+        </div>
+      </div>
+    </section>
+
+
+  <!-- MUSIC -->
+  <div class="fixed bottom-4 right-4 z-50">
+    <button id="musicToggle" class="bg-white shadow-lg rounded-full p-3 hover:bg-gray-100">🔈</button>
+  </div>
+  <audio id="bgMusic" src="music.mp3" loop></audio>
+
+  <script>
+    // Buka Undangan
+    document.getElementById('openInvitation').addEventListener('click', () => {
+      document.getElementById('cover').style.display = 'none';
+      const sections = document.querySelectorAll('.section');
+      sections.forEach((sec, i) => {
+        setTimeout(() => {
+          sec.classList.remove('hidden-section');
+          sec.classList.add('fade-in');
+        }, i * 400);
+      });
+      document.getElementById('bgMusic').play();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Musik Toggle
+    const bgMusic = document.getElementById('bgMusic');
+    const musicBtn = document.getElementById('musicToggle');
+    let playing = true;
+    musicBtn.addEventListener('click', () => {
+      if (playing) { bgMusic.pause(); musicBtn.textContent = '🔇'; }
+      else { bgMusic.play(); musicBtn.textContent = '🔈'; }
+      playing = !playing;
+    });
+
+    // Countdown
+  const countdownEl = document.getElementById("countdown");
+  const target = new Date("2025-12-11T10:00:00").getTime();
+
+  setInterval(() => {
+    const now = new Date().getTime();
+    const diff = target - now;
+
+    if (diff > 0) {
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      countdownEl.innerHTML = `
+        <span class="text-burgundy font-semibold">${days}</span> Hari 
+        <span class="text-burgundy font-semibold">${hours}</span> Jam 
+        <span class="text-burgundy font-semibold">${minutes}</span> Menit 
+        <span class="text-burgundy font-semibold">${seconds}</span> Detik
+      `;
+    } else {
+      countdownEl.innerHTML = "Hari ini 🎉";
+    }
+  }, 1000);
+
+    //SALIN
+    document.querySelectorAll('.salin-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.getAttribute('data-target');
+      const text = document.getElementById(targetId).textContent.trim();
+
+      // Cara aman untuk file lokal (fallback manual)
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => showToast(btn));
+      } else {
+        const temp = document.createElement('textarea');
+        temp.value = text;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand('copy');
+        document.body.removeChild(temp);
+        showToast(btn);
+      }
+    });
+  });
+
+  function showToast(button) {
+    const original = button.textContent;
+    button.textContent = "✅ Disalin!";
+    button.disabled = true;
+    setTimeout(() => {
+      button.textContent = original;
+      button.disabled = false;
+    }, 1500);
+  }
+
+  // ======== DATA UCAPAN AWAL ========
+  let ucapanList = [
+    { nama: "Adit", isi: "Selamat menempuh hidup baru, semoga sakinah mawaddah warahmah!" },
+    { nama: "Maya", isi: "Barakallah, semoga bahagia selalu ya Rausan & Yorisa 💕" },
+    { nama: "Dina", isi: "Turut berbahagia! Semoga menjadi keluarga yang diberkahi Allah." },
+    { nama: "Rafi", isi: "Selamat menempuh hidup baru! Semoga cinta dan kebahagiaan selalu menyertai kalian berdua." },
+    { nama: "Lina", isi: "Doa terbaik untuk kalian berdua, semoga selalu rukun dan saling melengkapi sampai akhir hayat 🤍" },
+    { nama: "Bagas", isi: "Semoga rumah tangganya penuh tawa, sabar, dan cinta tanpa batas!" },
+    { nama: "Tari", isi: "Barakallah! Semoga menjadi pasangan yang selalu bersama dalam suka dan duka." },
+    { nama: "Dimas", isi: "Selamat atas pernikahannya! Semoga menjadi keluarga kecil yang harmonis dan penuh berkah." },
+    { nama: "Reza", isi: "Semoga perjalanan baru ini selalu dilimpahi kebahagiaan dan cinta yang tumbuh setiap hari." },
+    { nama: "Wulan", isi: "Selamat berbahagia! Semoga Allah selalu menjaga dan mempersatukan kalian dalam kebaikan." },
+  ];
+
+  const slider = document.getElementById("sliderUcapan");
+  const form = document.getElementById("ucapanForm");
+  const namaInput = document.getElementById("namaUcapan");
+  const isiInput = document.getElementById("isiUcapan");
+
+  // ======== RENDER UCAPAN ========
+  function renderUcapan() {
+    slider.innerHTML = "";
+    ucapanList.forEach((u) => {
+      const card = document.createElement("div");
+      card.className =
+        "min-w-[300px] md:min-w-[400px] bg-white shadow-lg rounded-xl p-6 text-center transition-all hover:scale-105";
+      card.innerHTML = `
+        <p class="text-lg text-gray-700 italic mb-3">“${u.isi}”</p>
+        <p class="text-sm font-semibold text-burgundy">– ${u.nama}</p>
+      `;
+      slider.appendChild(card);
+    });
+
+    // Duplikat isi slider untuk efek loop mulus
+    slider.innerHTML += slider.innerHTML;
+  }
+
+  renderUcapan();
+
+  // ======== TAMBAH UCAPAN BARU ========
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const nama = namaInput.value.trim();
+    const isi = isiInput.value.trim();
+    if (!nama || !isi) return;
+
+    ucapanList.push({ nama, isi });
+    namaInput.value = "";
+    isiInput.value = "";
+
+    renderUcapan();
+    alert("Terima kasih! Ucapan kamu telah ditambahkan 💌");
+  });
+
+  // ======== SLIDER LOOP ========
+  let position = 0;
+  let autoSlide = true;
+  const speed = 0.5; // semakin besar semakin cepat
+  const toggleBtn = document.getElementById("toggleAuto");
+
+  function loop() {
+    if (autoSlide) {
+      position -= speed;
+      // reset posisi jika sudah setengah panjang total (karena duplikat)
+      if (Math.abs(position) >= slider.scrollWidth / 2) {
+        position = 0;
+      }
+      slider.style.transform = `translateX(${position}px)`;
+    }
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+
+  // ======== TOGGLE AUTO-SLIDE ========
+  toggleBtn.addEventListener("click", () => {
+    autoSlide = !autoSlide;
+    toggleBtn.textContent = autoSlide ? "⏸️" : "▶️";
+  });
+
+  // ======== TOMBOL MANUAL (prev/next) ========
+  document.getElementById("prevUcapan").addEventListener("click", () => {
+    position += 200;
+    slider.style.transform = `translateX(${position}px)`;
+  });
+
+  document.getElementById("nextUcapan").addEventListener("click", () => {
+    position -= 200;
+    slider.style.transform = `translateX(${position}px)`;
+  });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+  (function() {
+    emailjs.init("YqVIYIsrdHYqBvXmE"); // ganti dengan Public Key kamu
+  })();
+
+  document.getElementById("rsvpForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const form = this;
+    const successMsg = document.getElementById("rsvpSuccess");
+
+    emailjs.sendForm("service_rsuxvc8", "template_40mxrwc", form)
+      .then(() => {
+        form.reset();
+        successMsg.classList.remove("hidden");
+        setTimeout(() => successMsg.classList.add("hidden"), 5000);
+      }, (error) => {
+        alert("Gagal mengirim RSVP 😢\n" + JSON.stringify(error));
+      });
+  });
+    // Intersection Observer animasi tiap section
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-fade-in-up');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('section').forEach(sec => observer.observe(sec));
+</script>
+</body>
+</html>

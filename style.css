@@ -1,0 +1,65 @@
+:root{
+  --burgundy: #7a1f3d;
+  --wine: #b88a7d;
+  --whitewine: #fffaf7;
+}
+
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Poppins:wght@300;400;600&display=swap');
+
+body {
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+  color: #3b2b2b;
+  background: var(--whitewine);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* serif for headings */
+.font-serif { font-family: 'Playfair Display', serif; }
+
+/* section 16:9 */
+.section-16by9 {
+  width: 100%;
+  height: 56.25vw; /* 16:9 ratio */
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  position: relative;
+}
+
+/* card look */
+.card-content {
+  width: 100%;
+  background: rgba(255,255,255,0.88);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+}
+
+/* background transition */
+#bg {
+  transition: background-image 900ms ease-in-out;
+  background-position: center;
+  background-size: cover;
+}
+
+/* Arabic font */
+.arabic { font-family: 'Noto Naskh Arabic', serif; font-size: 1.15rem; }
+
+/* wish card */
+.wish-card {
+  padding: 1rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+/* small screen adjustments */
+@media (max-width:640px){
+  .section-16by9 { min-height: 520px; }
+  .card-content { padding: 1rem; border-radius: 12px; }
+  .arabic { font-size: 1.05rem; }
+}
+
