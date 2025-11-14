@@ -379,21 +379,19 @@ function cloneSlidesOnce() {
 
 function updateSlider(instant = false) {
   const slider = document.getElementById("sliderUcapan");
-  const total = slider.children.length;
+  const cards = slider.children;
 
-  if (totalOriginal === 0) return;
+  if (cards.length === 0 || totalOriginal === 0) return;
 
-  const offset = -currentSlide * 320;
+  // Hitung width card + gap dinamis
+  const cardWidth = cards[0].offsetWidth + 24; // gap-6 = 24px
 
-  if (instant) {
-    slider.style.transition = "none";
-  } else {
-    slider.style.transition = "transform 0.5s ease";
-  }
+  const offset = -currentSlide * cardWidth;
 
+  slider.style.transition = instant ? "none" : "transform 0.5s ease";
   slider.style.transform = `translateX(${offset}px)`;
 
-  // Reset ke awal clone secara seamless
+  // Jika sudah sampai clone terakhir → reset tanpa animasi
   if (currentSlide === totalOriginal) {
     setTimeout(() => {
       slider.style.transition = "none";
@@ -407,11 +405,7 @@ function startAutoPlay() {
   if (autoInterval) clearInterval(autoInterval);
 
   autoInterval = setInterval(() => {
-    if (!autoPlay) return;
-
-    const slider = document.getElementById("sliderUcapan");
-
-    if (totalOriginal === 0) return;
+    if (!autoPlay || totalOriginal === 0) return;
 
     currentSlide++;
     updateSlider();
@@ -427,6 +421,7 @@ document.getElementById("nextUcapan").addEventListener("click", () => {
 document.getElementById("prevUcapan").addEventListener("click", () => {
   if (totalOriginal === 0) return;
 
+  // Jika sedang di slide pertama → lompat ke clone terakhir tanpa animasi
   if (currentSlide === 0) {
     currentSlide = totalOriginal;
     updateSlider(true);
@@ -447,6 +442,7 @@ function initializeSliderLoop() {
   updateSlider(true);
   startAutoPlay();
 }
+
 
 </script>
 
