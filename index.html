@@ -431,7 +431,34 @@ async function submitUcapan() {
 
   loadUcapan();
 }
+document.getElementById("ucapanForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
 
+    const nama = document.getElementById("namaUcapan").value.trim();
+    const ucapan = document.getElementById("isiUcapan").value.trim();
+    if (!nama || !ucapan) return;
+
+    const formData = new FormData();
+    formData.append("nama", nama);
+    formData.append("ucapan", ucapan);
+
+    try {
+      await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: formData
+      });
+
+      // Bersihkan input
+      document.getElementById("namaUcapan").value = "";
+      document.getElementById("isiUcapan").value = "";
+
+      // Reload ucapan untuk masuk ke slider
+      loadUcapan();
+
+    } catch (err) {
+      console.error("Gagal kirim ucapan:", err);
+    }
+  });
 
 // ===============================
 // 7️⃣ BUTTON NEXT / PREV / PAUSE
