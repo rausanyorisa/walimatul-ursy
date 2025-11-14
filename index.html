@@ -286,38 +286,49 @@
     </section>
 
     <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzJTZfFNhePeKMrJL0dfgzOBCbmGShu2AaV_DkENEC0LIVADi5Wed1qK54Fd2OiLZgS/exec";  // ganti dengan yang terbaru
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbycAKI3ktpfQCRHraYDSPjQa0BUr53bBtQazYi75bzs5DvjBxwIvPTwwqLAcH77vcOo/exec";
 
+// =====================
 // KIRIM UCAPAN
+// =====================
 document.getElementById("ucapanForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const nama = document.getElementById("namaUcapan").value.trim();
-  const isi  = document.getElementById("isiUcapan").value.trim();
+  const ucapan = document.getElementById("isiUcapan").value.trim();
 
-  if (!nama || !isi) return;
+  if (!nama || !ucapan) return;
 
-  const formData = new FormData();
-  formData.append("nama", nama);
-  formData.append("ucapan", isi);
+  const body = new URLSearchParams();
+  body.append("nama", nama);
+  body.append("ucapan", ucapan);
 
   try {
-    await fetch(SCRIPT_URL, { method: "POST", body: formData });
+    await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: body,
+    });
 
     document.getElementById("namaUcapan").value = "";
     document.getElementById("isiUcapan").value = "";
 
-    loadUcapan();
+    loadUcapan(); // refresh ucapan
   } catch (err) {
-    console.error("Gagal mengirim:", err);
+    console.error("Gagal kirim:", err);
   }
 });
 
-// AMBIL UCAPAN
+// =====================
+// AMBIL & TAMPILKAN UCAPAN
+// =====================
 async function loadUcapan() {
   try {
-    const res = await fetch(SCRIPT_URL + "?t=" + Date.now()); // Anti-cache
-    const data = await res.json();
+    const res = await fetch(SCRIPT_URL);
+    const text = await res.text();
+
+    console.log("Response GET:", text);
+
+    const data = JSON.parse(text);
 
     const slider = document.getElementById("sliderUcapan");
     slider.innerHTML = "";
@@ -335,19 +346,21 @@ async function loadUcapan() {
     currentSlide = 0;
     updateSlider();
   } catch (err) {
-    console.error("Gagal load:", err);
+    console.error("Gagal load ucapan:", err);
   }
 }
 
-loadUcapan();
+loadUcapan(); // auto load setiap halaman dibuka
 
+// =====================
 // SLIDER
+// =====================
 let currentSlide = 0;
 let autoPlay = true;
 
 function updateSlider() {
   const slider = document.getElementById("sliderUcapan");
-  const offset = -currentSlide * 320;
+  const offset = -currentSlide * 320; 
   slider.style.transform = `translateX(${offset}px)`;
 }
 
@@ -363,10 +376,12 @@ document.getElementById("prevUcapan").addEventListener("click", () => {
   updateSlider();
 });
 
+// Auto play 4 detik
 setInterval(() => {
   if (autoPlay) document.getElementById("nextUcapan").click();
 }, 4000);
 
+// Toggle autoplay
 document.getElementById("toggleAuto").addEventListener("click", () => {
   autoPlay = !autoPlay;
   document.getElementById("toggleAuto").textContent = autoPlay ? "⏸️" : "▶️";
