@@ -353,39 +353,74 @@ async function loadUcapan() {
 loadUcapan(); // auto load setiap halaman dibuka
 
 // =====================
-// SLIDER
+// SLIDER UCAPAN FINAL
 // =====================
 let currentSlide = 0;
 let autoPlay = true;
+let autoInterval = null;
 
 function updateSlider() {
   const slider = document.getElementById("sliderUcapan");
-  const offset = -currentSlide * 320; 
+  const total = slider.children.length;
+
+  if (total === 0) return; // antisipasi kosong
+
+  // Pastikan currentSlide tidak keluar batas
+  if (currentSlide >= total) currentSlide = 0;
+  if (currentSlide < 0) currentSlide = total - 1;
+
+  const offset = -currentSlide * 320; // 300px card + 20px gap
   slider.style.transform = `translateX(${offset}px)`;
 }
 
+function startAutoPlay() {
+  // hapus interval lama agar tidak double
+  if (autoInterval) clearInterval(autoInterval);
+
+  autoInterval = setInterval(() => {
+    if (!autoPlay) return;
+
+    const slider = document.getElementById("sliderUcapan");
+    const total = slider.children.length;
+    if (total === 0) return;
+
+    currentSlide = (currentSlide + 1) % total;
+    updateSlider();
+  }, 4000);
+}
+
+// Tombol NEXT
 document.getElementById("nextUcapan").addEventListener("click", () => {
-  const total = document.getElementById("sliderUcapan").children.length;
+  const slider = document.getElementById("sliderUcapan");
+  const total = slider.children.length;
+  if (total === 0) return;
+
   currentSlide = (currentSlide + 1) % total;
   updateSlider();
 });
 
+// Tombol PREV
 document.getElementById("prevUcapan").addEventListener("click", () => {
-  const total = document.getElementById("sliderUcapan").children.length;
+  const slider = document.getElementById("sliderUcapan");
+  const total = slider.children.length;
+  if (total === 0) return;
+
   currentSlide = (currentSlide - 1 + total) % total;
   updateSlider();
 });
 
-// Auto play 4 detik
-setInterval(() => {
-  if (autoPlay) document.getElementById("nextUcapan").click();
-}, 4000);
-
-// Toggle autoplay
+// Tombol PAUSE/PLAY
 document.getElementById("toggleAuto").addEventListener("click", () => {
   autoPlay = !autoPlay;
+
   document.getElementById("toggleAuto").textContent = autoPlay ? "⏸️" : "▶️";
+
+  startAutoPlay(); // restart autoplay biar sinkron
 });
+
+// Mulai autoplay pertama kali
+startAutoPlay();
+
 </script>
 
 
